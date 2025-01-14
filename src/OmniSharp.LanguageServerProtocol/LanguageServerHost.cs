@@ -226,9 +226,9 @@ namespace OmniSharp.LanguageServerProtocol
 
             var assemblyLoader = serviceProvider.GetRequiredService<IAssemblyLoader>();
             var compositionHostBuilder = new CompositionHostBuilder(serviceProvider)
-                .WithAssemblies(assemblyLoader.LoadByAssemblyNameOrPath(logger, plugins.AssemblyNames).ToArray());
+                .WithAssemblies(assemblyLoader.LoadByAssemblyNameOrPath(logger, plugins.AssemblyNames).ToArray())
                 .WithOmniSharpAssemblies()
-                .WithAssemblies(typeof(LanguageServerHost).Assembly)
+                .WithAssemblies(typeof(LanguageServerHost).Assembly);
 
             return (serviceProvider, compositionHostBuilder.Build(environment.TargetDirectory));
         }

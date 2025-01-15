@@ -68,7 +68,7 @@ namespace OmniSharp.LanguageServerProtocol.Handlers
 
             var omnisharpResponse = await _completionHandler.Handle(omnisharpRequest);
 
-            return new CompletionList(omnisharpResponse.Items.Select(ToLSPCompletionItem), isIncomplete: omnisharpResponse.IsIncomplete);
+            return new CompletionList(omnisharpResponse.Items.Select(ToLSPCompletionItem).Take(200), isIncomplete: omnisharpResponse.IsIncomplete);
         }
 
         public override async Task<CompletionItem> Handle(CompletionItem request, CancellationToken cancellationToken)

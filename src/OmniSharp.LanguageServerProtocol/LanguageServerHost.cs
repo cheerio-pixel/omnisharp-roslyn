@@ -240,7 +240,6 @@ namespace OmniSharp.LanguageServerProtocol
 
             var documentSelectors = projectSystems
                 .GroupBy(x => x.Language)
-                .OrderByDescending(x => x.Key)
                 .Select(x => (
                     language: x.Key,
                     selector: new TextDocumentSelector(x
@@ -264,6 +263,7 @@ namespace OmniSharp.LanguageServerProtocol
                         })
                     )
                 ))
+                .OrderBy(x => x.language) // C# takes precendence
                 .ToArray();
 
             var logger = compositionHost.GetExport<ILoggerFactory>().CreateLogger<LanguageServerHost>();

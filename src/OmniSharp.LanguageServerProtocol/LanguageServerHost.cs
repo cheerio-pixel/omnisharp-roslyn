@@ -226,9 +226,9 @@ namespace OmniSharp.LanguageServerProtocol
 
             var assemblyLoader = serviceProvider.GetRequiredService<IAssemblyLoader>();
             var compositionHostBuilder = new CompositionHostBuilder(serviceProvider)
-                .WithAssemblies(assemblyLoader.LoadByAssemblyNameOrPath(logger, plugins.AssemblyNames).ToArray())
                 .WithOmniSharpAssemblies()
-                .WithAssemblies(typeof(LanguageServerHost).Assembly);
+                .WithAssemblies(typeof(LanguageServerHost).Assembly)
+                .WithAssemblies(assemblyLoader.LoadByAssemblyNameOrPath(logger, plugins.AssemblyNames).ToArray());
 
             return (serviceProvider, compositionHostBuilder.Build(environment.TargetDirectory));
         }
@@ -240,6 +240,7 @@ namespace OmniSharp.LanguageServerProtocol
 
             var documentSelectors = projectSystems
                 .GroupBy(x => x.Language)
+                .OrderByDescending(x => x.Key)
                 .Select(x => (
                     language: x.Key,
                     selector: new TextDocumentSelector(x
@@ -274,6 +275,7 @@ namespace OmniSharp.LanguageServerProtocol
 
             var omnisharpRequestHandlers =
                 compositionHost.GetExports<Lazy<IRequestHandler, OmniSharpRequestHandlerMetadata>>();
+;
             // TODO: Get these with metadata so we can attach languages
             // This will then let us build up a better document filter, and add handles foreach type of handler
             // This will mean that we will have a strategy to create handlers from the interface type
